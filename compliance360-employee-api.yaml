@@ -1,0 +1,306 @@
+openapi: 3.0.0
+# Added by API Auto Mocking Plugin
+servers:
+  #- description: SwaggerHub API Auto Mocking
+  #  url: https://virtserver.swaggerhub.com/saiglobal/compliance360-data/2.0.0
+  - description: Production Compliance 360
+    url: https://secure.compliance360.com
+info:
+  description: |
+    # Overview
+    The Compliance 360 Employee API provides the ability to create, update and remove user accounts, a.k.a. employees, from the Compliance 360 application. This documentation covers the endpoints that are required to accomplish these activities. The full listing of Module, Components and Operations can be retrieved by using the Compliance 360 metadata API. 
+    
+    ## Employee Maintenance Process
+    This APIs listed in this below will allow you create, update and delete a new user account including the following actions:
+    
+    1. Find the default Employee workflow template
+    1. Find the division where the employee should be created.
+    1. Find an existing JobTitle
+    1. Find an existing Department
+    1. Create the new Employe
+    
+    ## Built using core API endpoints
+    This api is built using the endpoints described in the following APIs:
+    * [Compliance 360 Security API](https://github.com/SAIGlobal/compliance360-security-api#compliance-360-security-api)
+    * [Compliance 360 Metadata API](https://github.com/SAIGlobal/compliance360-metadata-api#compliance-360-metadata-api)
+    * [Compliance 360 Data API](https://github.com/SAIGlobal/compliance360-data-api#compliance-360-data-api)
+    
+    # API Syntax Reference
+    The Compliance 360 APIs support a robust query and filtering syntax that can be used with GET endpoints 
+    that are designed to return information. Please see the [Compliance 360 API Syntax Reference](https://github.com/SAIGlobal/compliance360-data-api/blob/master/SYNTAX_REFERENCE.md#compliance-360-api-syntax-reference) for more information on how to filter, sort and select fields during query operations.
+    
+  version: "2.0.0"
+  title: Compliance 360 Data API
+  contact:
+    email: support@saiglobal.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /API/2.0/Data/Global/WorkflowTemplates/Employee:
+    get:
+      tags:
+        - Workflow
+      summary: Gets the default Employee workflow template
+      operationId: getDefaultWorkflowTemplate
+      parameters:
+        - in: query
+          name: take
+          description: 1, The number of records to return.
+          required: true
+          schema:
+            enum:
+              - 1
+        - in: query
+          name: where
+          description: IsDefault='True',  The filter criteria used to return the default workflow template.
+          required: true
+          schema:
+            enum:
+              - IsDefault='True'
+        - in: query
+          name: token
+          description: The current session token obtained using the security API.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    properties:
+                      code: 
+                        type: string
+                        description: The HTTP status code
+                      message:
+                        type: string
+                        description: The constant value \"OK\" or an error message if HTTP Status code indicates a non-success status.
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                example:
+                  status:
+                    code: 200
+                    message: OK
+                  data:
+                    - id: 'Global/WorkflowTemplates/Employee:806'
+          
+  /API/2.0/Data/Lookup/Employee/JobTitleId:
+    get:
+      tags:
+        - Job Title
+      summary: Gets a job title by its name.
+      operationId: getJobTitle
+      parameters:
+        - in: query
+          name: take
+          description: 1, The number of records to return.
+          required: true
+          schema:
+            enum:
+              - 1
+        - in: query
+          name: where
+          description: Text='{job_title}',  The job title name filter criteria.
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: token
+          description: The current session token obtained using the security API.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    properties:
+                      code: 
+                        type: string
+                        description: The HTTP status code
+                      message:
+                        type: string
+                        description: The constant value \"OK\" or an error message if HTTP Status code indicates a non-success status.
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                example:
+                  status:
+                    code: 200
+                    message: OK
+                  data:
+                    - id: 'Lookup/Employee/JobTitleId:806'
+                    
+  /API/2.0/Data/EmployeeManagement/EmployeeDepartment/Default:
+    get:
+      tags:
+        - Department
+      summary: Gets a department by its name.
+      operationId: getDepartment
+      parameters:
+        - in: query
+          name: take
+          description: 1, The number of records to return.
+          required: true
+          schema:
+            enum:
+              - 1
+        - in: query
+          name: where
+          description: DeptName='{department_name}',  The department name filter criteria.
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: token
+          description: The current session token obtained using the security API.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    properties:
+                      code: 
+                        type: string
+                        description: The HTTP status code
+                      message:
+                        type: string
+                        description: The constant value \"OK\" or an error message if HTTP Status code indicates a non-success status.
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                example:
+                  status:
+                    code: 200
+                    message: OK
+                  data:
+                    - id: 'EmployeeManagement/EmployeeDepartment/Default:207'
+                    
+  /API/2.0/Data/EmployeeManagement/Employee/Default:
+    post:
+      tags:
+        - Employee
+      summary: Creates a new employee
+      operationId: createEmployee
+      requestBody:
+        description: The employee information.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    properties:
+                      code: 
+                        type: string
+                        description: The HTTP status code
+                      message:
+                        type: string
+                        description: The constant value \"OK\" or an error message if HTTP Status code indicates a non-success status.
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                example:
+                  status:
+                    code: 200
+                    message: OK
+                  data:
+                    - id: 'EmployeeManagement/EmployeeDepartment/Default:207'
+components:
+  schemas:
+    Employee:
+      type: object
+      required: 
+        - id
+        - FirstName
+        - LastName
+        - EmployeeNum
+        - Email
+      properties:
+        id: 
+          type: string
+          description: The 
+          example: EmployeeManagement/EmployeeDepartment/Default:207
+        Department:
+          type: object
+          properties:
+            id:
+              type: string
+              example: EmployeeManagement/EmployeeDepartment/Default:207
+        Email:
+          type: string
+        Fax:
+          type: string
+        FirstName:
+          type: string
+        HireDate:
+          type: string
+        JobTitleId:
+          type: object
+          properties:
+            id:
+              type: string
+              example: Lookup/Employee/JobTitleId:806
+        LastName:
+          type: string
+        MiddleInitial:
+          type: string
+        EmployeeNum:
+          type: string
+          description: The unique identifier for an employee.
+        Phone:
+          type: string
+        PrimaryDivision:
+          type: object
+          properties:
+            id:
+              type: string
+              example: EmployeeManagement/EmployeeDivision/Default:5
+        Salutation:
+          type: string
