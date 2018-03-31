@@ -425,6 +425,12 @@ paths:
           description: The Id of the department to update.
           schema:
             type: string
+        - in: query
+          name: token
+          description: The current session token obtained using the security API.
+          required: true
+          schema:
+            type: string
       requestBody:
         description: The department information.
         required: true
@@ -588,15 +594,15 @@ paths:
       summary: Updates an existing employee.
       operationId: updateEmployee
       parameters:
-        - in: query
-          name: token
-          description: The current session token obtained using the security API.
-          required: true
-          schema:
-            type: string
         - in: path
           name: id
           description: The id of the employee to update.
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: token
+          description: The current session token obtained using the security API.
           required: true
           schema:
             type: string
@@ -703,7 +709,7 @@ components:
           properties:
             id:
               type: string
-              example: EmployeeManagement/EmployeeDivision/Default:6
+              example: EmployeeManagement/EmployeeDivision/Default:5
         Salutation:
           type: string
     JobTitle:
