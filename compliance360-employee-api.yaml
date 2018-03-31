@@ -8,10 +8,10 @@ servers:
 info:
   description: |
     # Overview
-    The Compliance 360 Employee API provides the ability to create, update and remove user accounts, a.k.a. employees, from the Compliance 360 application. This documentation covers the endpoints that are required to accomplish these activities. The full listing of Module, Components and Operations can be retrieved by using the Compliance 360 metadata API. 
+    The Compliance 360 Employee API provides the ability to create, update and remove user accounts, a.k.a. employees, from the Compliance 360 application. This documentation covers the endpoints that are required to accomplish these activities. The full listing of Module, Components and Operations can be retrieved by using the Compliance 360 metadata API. All data related activities (create, udpate, find, delete) are accomplished using the Compliance 360 data API
     
     ## Employee Maintenance Process
-    This APIs listed in this below will allow you create, update and delete a new user account including the following actions:
+    This APIs listed in this below will allow you find, create, update and delete user accounts. For example, to create a new user account you will need to perform the following actions:
     
     1. Find the default Employee workflow template
     1. Find the division where the employee should be created.
@@ -30,7 +30,7 @@ info:
     that are designed to return information. Please see the [Compliance 360 API Syntax Reference](https://github.com/SAIGlobal/compliance360-data-api/blob/master/SYNTAX_REFERENCE.md#compliance-360-api-syntax-reference) for more information on how to filter, sort and select fields during query operations.
     
   version: "2.0.0"
-  title: Compliance 360 Data API
+  title: Compliance 360 Employee API
   contact:
     email: support@saiglobal.com
   license:
@@ -41,23 +41,39 @@ paths:
     get:
       tags:
         - Workflow
-      summary: Gets the default Employee workflow template
+      summary: Finds WorkflowTemplates for Employees
       operationId: getDefaultWorkflowTemplate
       parameters:
         - in: query
-          name: take
-          description: 1, The number of records to return.
-          required: true
+          name: skip
+          description: The number of records to skip before returning results.
+          required: false
           schema:
-            enum:
-              - 1
+            type: number
+        - in: query
+          name: take
+          description: The number of records to return.
+          required: false
+          schema:
+            type: number
+        - in: query
+          name: select
+          description: Comma separated list of fields to return in the result set.
+          required: false
+          schema:
+            type: string
         - in: query
           name: where
-          description: IsDefault='True',  The filter criteria used to return the default workflow template.
-          required: true
+          description: The filter criteria used to return the default workflow template. Use IsDefault='True' to return the default workflow template for an object type.
+          required: false
           schema:
-            enum:
-              - IsDefault='True'
+            type: string
+        - in: query
+          name: sort
+          description: Collection of sort expressions.
+          required: false
+          schema:
+            type: string
         - in: query
           name: token
           description: The current session token obtained using the security API.
@@ -99,16 +115,27 @@ paths:
     get:
       tags:
         - Job Title
-      summary: Gets a job title by its name.
+      summary: Finds JobTitle objects
       operationId: getJobTitle
       parameters:
         - in: query
           name: take
-          description: 1, The number of records to return.
-          required: true
+          description: The number of records to return.
+          required: false
           schema:
-            enum:
-              - 1
+            type: number
+        - in: query
+          name: skip
+          description: The number of records to skip before returning results.
+          required: false
+          schema:
+            type: number
+        - in: query
+          name: sort
+          description: A collection of sort expressions.
+          required: false
+          schema:
+            type: string
         - in: query
           name: where
           description: Text='{job_title}',  The job title name filter criteria.
@@ -151,24 +178,152 @@ paths:
                     message: OK
                   data:
                     - id: 'Lookup/Employee/JobTitleId:806'
+    post:
+      tags:
+        - Job Title
+      summary: Creates a new JobTitle
+      operationId: createJobTtitle
+      parameters:
+        - in: query
+          name: token
+          description: The current session token obtained using the security API.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: The JobTitle information.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobTitle'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    properties:
+                      code: 
+                        type: string
+                        description: The HTTP status code
+                      message:
+                        type: string
+                        description: The constant value \"OK\" or an error message if HTTP Status code indicates a non-success status.
+                  id:
+                    type: string
+                example:
+                  status:
+                    code: 200
+                    message: OK
+                  id: 'Lookup/Employee/JobTitleId:806'
+                  
+  /API/2.0/Data/Lookup/Employee/JobTitleId/{id}:
+    post:
+      tags:
+        - Job Title
+      summary: Updates a JobTitle
+      operationId: updateJobTitle
+      parameters:
+        - in: path
+          name: id
+          description: The id of the job title to update.
+          required: true
+          schema:
+            type: number
+        - in: query
+          name: token
+          description: The current session token obtained using the security API.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: The job title information.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobTitle'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    properties:
+                      code: 
+                        type: string
+                        description: The HTTP status code
+                      message:
+                        type: string
+                        description: The constant value \"OK\" or an error message if HTTP Status code indicates a non-success status.
+                  id: 
+                    type: string
+                example:
+                  status:
+                    code: 200
+                    message: OK
+                  id: 'Lookup/Employee/JobTitleId:806'
+  
+  /API/2.0/Data/Lookup/Employee/JobTitleId/{id}/Delete:
+    post:
+      tags:
+        - Job Title
+      summary: Deletes a JobTitle
+      operationId: deleteJobTitle
+      parameters:
+        - in: path
+          name: id
+          description: The id of the job title.
+          required: true
+          schema:
+            type: number
+        - in: query
+          name: token
+          description: The current session token obtained using the security API.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
                     
   /API/2.0/Data/EmployeeManagement/EmployeeDepartment/Default:
     get:
       tags:
         - Department
-      summary: Gets a department by its name.
-      operationId: getDepartment
+      summary: Finds departments.
+      operationId: getDepartments
       parameters:
         - in: query
           name: take
-          description: 1, The number of records to return.
-          required: true
+          description: The number of records to return.
+          required: false
           schema:
-            enum:
-              - 1
+            type: number
+        - in: query
+          name: skip
+          description: The number of records to skip before returning records.
+          required: false
+          schema:
+            type: number
+        - in: query
+          name: sort
+          description: A collection of sort expressions.
+          required: false
+          schema:
+            type: string
         - in: query
           name: where
-          description: DeptName='{department_name}',  The department name filter criteria.
+          description: DeptName='{department_name}',  The department field filter criteria.
           required: true
           schema:
             type: string
@@ -208,20 +363,26 @@ paths:
                     message: OK
                   data:
                     - id: 'EmployeeManagement/EmployeeDepartment/Default:207'
-                    
-  /API/2.0/Data/EmployeeManagement/Employee/Default:
+  
     post:
       tags:
-        - Employee
-      summary: Creates a new employee
-      operationId: createEmployee
+        - Department
+      summary: Creates a new department.
+      operationId: createDepartment
+      parameters:
+        - in: query
+          name: token
+          description: The current session token obtained using the security API.
+          required: true
+          schema:
+            type: string
       requestBody:
-        description: The employee information.
+        description: The department information.
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Employee'
+              $ref: '#/components/schemas/Department'
       responses:
         '200':
           description: Success
@@ -250,8 +411,249 @@ paths:
                   status:
                     code: 200
                     message: OK
+                  id: 'EmployeeManagement/EmployeeDepartment/Default:207'
+                    
+  /API/2.0/Data/EmployeeManagement/EmployeeDepartment/Default/{id}:
+    post:
+      tags:
+        - Department
+      summary: Updates a department.
+      operationId: updateDepartment
+      parameters:
+        - in: path
+          name: id
+          description: The Id of the department to update.
+          schema:
+            type: string
+      requestBody:
+        description: The department information.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Department'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    properties:
+                      code: 
+                        type: string
+                        description: The HTTP status code
+                      message:
+                        type: string
+                        description: The constant value \"OK\" or an error message if HTTP Status code indicates a non-success status.
+                  id:
+                    type: string
+                example:
+                  status:
+                    code: 200
+                    message: OK
+                  id: 'EmployeeManagement/EmployeeDepartment/Default:207'
+  /API/2.0/Data/EmployeeManagement/EmployeeDepartment/Default/{id}/Delete:
+    post:
+      tags:
+        - Department
+      summary: Deletes a departments.
+      operationId: deleteDepartment
+      parameters:
+        - in: path
+          name: id
+          description: The Id of the department to delete.
+          schema:
+            type: number
+        - name: token
+          in: query
+          description: The current session token obtained using the security API.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+                  
+  /API/2.0/Data/EmployeeManagement/Employee/Default:
+    get:
+      tags:
+        - Employee
+      summary: Find employees
+      operationId: findEmployees
+      parameters:
+        - in: query
+          name: take
+          description: The number of records to return.
+          required: false
+          schema:
+            type: number
+        - in: query
+          name: skip
+          description: The number of records to skip before returning results.
+          required: false
+          schema:
+            type: number
+        - in: query
+          name: sort
+          description: A collection of sort expressions.
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: where
+          description: The employee field filter criteria.
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: token
+          description: The current session token obtained using the security API.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    properties:
+                      code: 
+                        type: string
+                        description: The HTTP status code
+                      message:
+                        type: string
+                        description: The constant value \"OK\" or an error message if HTTP Status code indicates a non-success status.
                   data:
-                    - id: 'EmployeeManagement/EmployeeDepartment/Default:207'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Employee'
+                      
+    post:
+      tags:
+        - Employee
+      summary: Creates a new employee
+      operationId: createEmployee
+      parameters:
+        - in: query
+          name: token
+          description: The current session token obtained using the security API.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: The employee information.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    properties:
+                      code: 
+                        type: string
+                        description: The HTTP status code
+                      message:
+                        type: string
+                        description: The constant value \"OK\" or an error message if HTTP Status code indicates a non-success status.
+                  id:
+                    type: string
+                example:
+                  status:
+                    code: 200
+                    message: OK
+                  id: 'EmployeeManagement/Employee/Default:1203'
+                  
+  /API/2.0/Data/EmployeeManagement/Employee/Default/{id}:
+    post:
+      tags:
+        - Employee
+      summary: Updates an existing employee.
+      operationId: updateEmployee
+      parameters:
+        - in: query
+          name: token
+          description: The current session token obtained using the security API.
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: id
+          description: The id of the employee to update.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: The employee information to update.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    properties:
+                      code: 
+                        type: string
+                        description: The HTTP status code
+                      message:
+                        type: string
+                        description: The constant value \"OK\" or an error message if HTTP Status code indicates a non-success status.
+                  id:
+                    type: string
+                example:
+                  status:
+                    code: 200
+                    message: OK
+                  id: 'EmployeeManagement/EmployeeDepartment/Default:207'
+  /API/2.0/Data/EmployeeManagement/Employee/Default/{id}/Delete:
+    post:
+      tags:
+        - Employee
+      summary: Deletes an existing employee.
+      operationId: deleteEmployee
+      parameters:
+        - in: query
+          name: token
+          description: The current session token obtained using the security API.
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: id
+          description: The id of the employee to delete.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          
 components:
   schemas:
     Employee:
@@ -301,6 +703,35 @@ components:
           properties:
             id:
               type: string
-              example: EmployeeManagement/EmployeeDivision/Default:5
+              example: EmployeeManagement/EmployeeDivision/Default:6
         Salutation:
+          type: string
+    JobTitle:
+      type: object
+      required:
+        - id
+        - Text
+      properties:
+        id:
+          type: string
+        Division:
+          type: object
+          properties:
+            id:
+              type: string
+        Text:
+          type: string
+    Department:
+      type: object
+      properties:
+        id:
+          type: string
+        Division:
+          type: object
+          properties:
+            id:
+              type: string
+        DeptNum:
+          type: string
+        DeptName:
           type: string
