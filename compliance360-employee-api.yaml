@@ -11,10 +11,10 @@ info:
     The Compliance 360 Employee API provides the ability to create, update and remove user accounts, a.k.a. employees, from the Compliance 360 application. This documentation covers the endpoints that are required to accomplish these activities. The full listing of Module, Components and Operations can be retrieved by using the Compliance 360 metadata API. All data related activities (create, udpate, find, delete) are accomplished using the Compliance 360 data API
     
     ## Employee Maintenance Process
-    This APIs listed in this below will allow you find, create, update and delete user accounts. For example, to create a new user account you will need to perform the following actions:
+    This APIs listed below will allow you find, create, update and delete user accounts. For example, to create a new user account you will need to perform the following actions:
     
-    1. Find the default Employee workflow template
-    1. Find the division where the employee should be created.
+    1. Find the default Incidents workflow template
+    1. Find the division where the Incident should be created.
     1. Find an existing JobTitle
     1. Find an existing Department
     1. Create the new Employe
@@ -673,8 +673,8 @@ components:
       properties:
         id: 
           type: string
-          description: The 
-          example: EmployeeManagement/EmployeeDepartment/Default:207
+          description: The id of the employee
+          example: EmployeeManagement/Employee/Default:201
         Department:
           type: object
           properties:
