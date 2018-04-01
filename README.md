@@ -9,7 +9,7 @@
 # Introduction
 The Compliance 360 application is the leading Governance Risk and Compliance (GRC) platform. The Compliance 360 system is a highly-configurable application framework underpinned by a metadata-driven architecture. 
 
-The Employee API provides developers with the ability to...
+The Employee API provides developers with the ability to create, find, update and delete user accounts, aka Employees.
 
 # API Documentation
 Our APIs are documented in the [OpenAPI Specification](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md) format. [Read the documentation](https://app.swaggerhub.com/api/saiglobal/compliance360-employee/2.0.0).
